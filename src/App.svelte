@@ -87,11 +87,4 @@
     padding: 1rem;
     font-size: 4rem;
   }
-
-  button {
-    padding: 2rem;
-    height: 100%;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
 </style>
