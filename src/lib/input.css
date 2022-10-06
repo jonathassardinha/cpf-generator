@@ -1,0 +1,19 @@
+.input {
+  text-align: center;
+  font-size: 4rem;
+  padding: 0.4rem;
+  width: 4rem;
+
+  background: none;
+  border: none;
+  border-bottom: 1px solid white;
+}
+
+.input:disabled {
+  border-bottom: 1px solid #999;
+}
+
+.input:focus-visible {
+  outline: none;
+  border-bottom: 3px solid white;
+}

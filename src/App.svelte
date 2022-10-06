@@ -1,4 +1,5 @@
 <script lang="ts">
+  import InputArray from "./lib/InputArray.svelte";
   function calculateDigit(numbers: string) {
     const multiplier = numbers.length + 1;
 
@@ -16,29 +17,16 @@
     return calculatedVerifier;
   }
 
-  let value: string = "";
+  let arrayValue: string = "";
+
   let firstDigit: string = "";
   let secondDigit: string = "";
-  let calculatedCpf: string = "___.___.___-__";
 
   $: {
-    if (value.length === 9) {
-      firstDigit = calculateDigit(value).toString();
-      secondDigit = calculateDigit(`${value}${firstDigit}`).toString();
+    if (arrayValue.length === 9) {
+      firstDigit = calculateDigit(arrayValue).toString();
+      secondDigit = calculateDigit(`${arrayValue}${firstDigit}`).toString();
     }
-  }
-
-  $: {
-    const digits = value.length === 9 ? `${firstDigit}${secondDigit}` : "__";
-
-    calculatedCpf = `${value
-      .padEnd(9, "_")
-      .match(/.{3}/g)
-      .join(".")}-${digits}`;
-  }
-
-  function calculateCpf() {
-    alert("new cpf");
   }
 </script>
 
@@ -46,12 +34,31 @@
   <h1>CPF Generator</h1>
 
   <div class="content-wrapper">
-    <h2>{calculatedCpf}</h2>
-    <input name="cpf" bind:value maxlength="9" size="6" />
+    <div class="input-wrapper">
+      <InputArray bind:value={arrayValue} numberOfInputs={9} />
+      <input
+        class="input"
+        value={arrayValue.length === 9 ? firstDigit : ""}
+        disabled
+      />
+      <input
+        class="input"
+        value={arrayValue.length === 9 ? secondDigit : ""}
+        disabled
+      />
+    </div>
+    <button
+      disabled={arrayValue.length !== 9}
+      on:click={() => {
+        navigator.clipboard.writeText(
+          `${arrayValue}${firstDigit}${secondDigit}`
+        );
+      }}>Copy</button
+    >
   </div>
 </main>
 
-<style>
+<style lang="scss">
   main {
     display: flex;
     flex-direction: column;
@@ -68,13 +75,8 @@
     font-size: 7rem;
   }
 
-  h2 {
-    font-size: 5rem;
-  }
-
   .content-wrapper {
     flex-grow: 1;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,9 +84,19 @@
     gap: 5rem;
   }
 
-  input {
-    text-align: center;
-    padding: 1rem;
-    font-size: 4rem;
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  button {
+    padding: 2rem 4rem;
+    text-transform: uppercase;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
   }
 </style>
